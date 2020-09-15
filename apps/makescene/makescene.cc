@@ -398,6 +398,23 @@ import_bundle_nvm (AppSettings const& conf)
                 break;
         }
 
+        /* Load image masks (if any) */
+        std::string maskFilename = util::fs::dirname(nvm_cam.filename) + "/../masks/" + util::fs::replace_extension(util::fs::basename(nvm_cam.filename), "png");
+        if (util::fs::file_exists(maskFilename.c_str()))
+        {
+            mve::ByteImage::Ptr mask = load_8bit_image(maskFilename, NULL);
+            if (mask != nullptr)
+            {
+                mask = limit_image_size<uint8_t>(mask, conf.max_pixels);
+                view->set_image(mask, "mask");
+            }
+            else
+            {
+                std::cout << "Error loading mask: " << maskFilename
+                    << " (" << nvm_cam.filename << " will not be masked)" << std::endl;
+            }
+        }
+
         /* Add original image. */
         if (conf.import_orig)
         {
