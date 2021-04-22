@@ -22,12 +22,14 @@
 #   include <shlobj.h>
 #   include <sys/stat.h>
 #   include <sys/types.h>
+#   define PATH_SEP '\\'
 #else // Linux, OSX, ...
 #   include <dirent.h>
 #   include <unistd.h>
 #   include <sys/stat.h>
 #   include <sys/types.h>
 #   include <pwd.h>
+#   define PATH_SEP '/'
 #endif
 
 #if defined(__APPLE__)
@@ -416,19 +418,31 @@ dirname (std::string const& path)
 
     /* Skip group of slashes at the end. */
     std::size_t len = path.size();
-    while (len > 0 && path[len - 1] == '/')
+#ifdef _WIN32
+    while (len > 0 && path[len - 1] == PATH_SEP && path[len - 1] == '/')
+#else
+    while (len > 0 && path[len - 1] == PATH_SEP)
+#endif
         len -= 1;
     if (len == 0)
         return "/";
 
     /* Skip basename. */
-    while (len > 0 && path[len - 1] != '/')
+#ifdef _WIN32
+    while (len > 0 && path[len - 1] != PATH_SEP && path[len - 1] != '/')
+#else
+    while (len > 0 && path[len - 1] != PATH_SEP)
+#endif
         len -= 1;
     if (len == 0)
         return ".";
 
     /* Skip group of slashes. */
-    while (len > 1 && path[len - 1] == '/')
+#ifdef _WIN32
+    while (len > 1 && path[len - 1] == PATH_SEP && path[len - 1] == '/')
+#else
+    while (len > 1 && path[len - 1] == PATH_SEP)
+#endif
         len -= 1;
 
     return path.substr(0, len);
