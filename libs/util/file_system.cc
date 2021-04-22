@@ -22,14 +22,12 @@
 #   include <shlobj.h>
 #   include <sys/stat.h>
 #   include <sys/types.h>
-#   define PATH_SEP '\\'
 #else // Linux, OSX, ...
 #   include <dirent.h>
 #   include <unistd.h>
 #   include <sys/stat.h>
 #   include <sys/types.h>
 #   include <pwd.h>
-#   define PATH_SEP '/'
 #endif
 
 #if defined(__APPLE__)
@@ -419,9 +417,9 @@ dirname (std::string const& path)
     /* Skip group of slashes at the end. */
     std::size_t len = path.size();
 #ifdef _WIN32
-    while (len > 0 && path[len - 1] == PATH_SEP && path[len - 1] == '/')
+    while (len > 0 && path[len - 1] == '\\' && path[len - 1] == '/')
 #else
-    while (len > 0 && path[len - 1] == PATH_SEP)
+    while (len > 0 && path[len - 1] == '/')
 #endif
         len -= 1;
     if (len == 0)
@@ -429,9 +427,9 @@ dirname (std::string const& path)
 
     /* Skip basename. */
 #ifdef _WIN32
-    while (len > 0 && path[len - 1] != PATH_SEP && path[len - 1] != '/')
+    while (len > 0 && path[len - 1] != '\\' && path[len - 1] != '/')
 #else
-    while (len > 0 && path[len - 1] != PATH_SEP)
+    while (len > 0 && path[len - 1] != '/')
 #endif
         len -= 1;
     if (len == 0)
@@ -439,9 +437,9 @@ dirname (std::string const& path)
 
     /* Skip group of slashes. */
 #ifdef _WIN32
-    while (len > 1 && path[len - 1] == PATH_SEP && path[len - 1] == '/')
+    while (len > 1 && path[len - 1] == '\\' && path[len - 1] == '/')
 #else
-    while (len > 1 && path[len - 1] == PATH_SEP)
+    while (len > 1 && path[len - 1] == '/')
 #endif
         len -= 1;
 
