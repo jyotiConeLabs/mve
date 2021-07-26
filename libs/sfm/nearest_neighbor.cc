@@ -39,10 +39,16 @@
 
 #include <algorithm>
 #include <iostream>
-#include <emmintrin.h> // SSE2
-#include <pmmintrin.h> // SSE3
 
 #include "sfm/nearest_neighbor.h"
+
+
+#if ENABLE_SSE2_NN_SEARCH && defined(__SSE2__)
+#include <emmintrin.h> // SSE2
+#endif
+#if ENABLE_SSE3_NN_SEARCH && defined(__SSE3__)
+#include <pmmintrin.h> // SSE3
+#endif
 
 SFM_NAMESPACE_BEGIN
 
