@@ -180,9 +180,9 @@ load_nvm_bundle (std::string const& filename,
         }
 
         /* There should be at least 2 cameras that see the point. */
-        if (num_refs < 2 || num_refs > num_views)
-            throw util::Exception("Invalid number of feature refs: ",
-                util::string::get(num_refs));
+        // if (num_refs < 2 || num_refs > num_views)
+        //     throw util::Exception("Invalid number of feature refs: ",
+        //         util::string::get(num_refs));
 
         /* Read refs. */
         feature.refs.reserve(num_refs);
